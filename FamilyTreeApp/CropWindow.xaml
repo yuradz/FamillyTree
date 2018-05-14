@@ -1,0 +1,43 @@
+﻿<Window x:Class="FamilyTreeApp.CropWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FamilyTreeApp"
+        mc:Ignorable="d"
+        x:Name="cropWindow" Title="CropWindow" Height="500" Width="700" ResizeMode="NoResize">
+    <Canvas x:Name ="canvas" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top" Width="700" Height="474">
+        <Label Content="Please, crop your image" Width="700" 
+               Height="26" HorizontalContentAlignment="Center" 
+               FontWeight="Bold" />
+        <Image x:Name="picture" Height="437" Canvas.Top="26" Width="694"/>
+        <Grid x:Name="resizeAreaCanvas" Height="120" Width="90"
+                Canvas.Left="305" Canvas.Top="177">
+            <Thumb x:Name="outerThumbTopBorder"  Height="4" Margin ="0,-4,0,0" 
+                   VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
+            <Thumb x:Name="outerThumbLeftBorder" Width="4" Margin ="-4,0,0,0"
+                   HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+            <Thumb x:Name="outerThumbRightBorder" Width="4" Margin ="0,0,-4,0"
+                   HorizontalAlignment="Right" VerticalAlignment="Stretch"/>
+            <Thumb x:Name="outerThumbBottomBorder" Height="4" Margin ="0,0,0,-4"
+                   VerticalAlignment="Bottom" HorizontalAlignment="Stretch"/>
+            <Thumb Width="7" Height="7" Cursor="SizeNWSE" Margin ="-6,-6,0,0"
+                   HorizontalAlignment="Left" VerticalAlignment="Top" DragDelta="Thumb_LeftTopResize"/>
+            <Thumb Height="7" Cursor="SizeNESW" Margin ="0,-6,-6,0" VerticalAlignment="Top" 
+                   DragDelta="Thumb_RightTopResize" HorizontalAlignment="Right" Width="7"/>
+            <Thumb Width="7" Height="7" Cursor="SizeNESW" Margin ="-6,0,0,-6" 
+                   HorizontalAlignment="Left" VerticalAlignment="Bottom" DragDelta="Thumb_LeftBottomResize"/>
+            <Thumb Width="7" Height="7" Cursor="SizeNWSE" Margin ="0,0,-6,-6" 
+                   HorizontalAlignment="Right" VerticalAlignment="Bottom"  DragDelta="Thumb_RightBottomResize"/>
+            <Thumb x:Name="innerThumb" DragDelta="Thumb_Move"
+                           HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <Thumb.Template>
+                    <ControlTemplate>
+                        <Rectangle Fill="Aqua" Opacity="0.3"/>
+                    </ControlTemplate>
+                </Thumb.Template>
+            </Thumb>
+        </Grid>
+        <Button Content="OK" Canvas.Left="590" Canvas.Top="420" Width="76" Click="Button_Click" Height="29"/>
+    </Canvas>
+</Window>
