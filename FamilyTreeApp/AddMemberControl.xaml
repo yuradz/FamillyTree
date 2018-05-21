@@ -20,25 +20,25 @@
                                         Mode=FindAncestor, 
                                         AncestorType={x:Type UserControl}}}"/>
         </Border>
-        <TextBox x:Name="txtbFName" Height="23" Canvas.Left="208" TextWrapping="Wrap" Canvas.Top="67" 
-                 Width="121" Text="{Binding Path=Member.FirstName, 
+        <TextBox x:Name="txtbFName" Height="23" Canvas.Left="208" TextWrapping="Wrap" Canvas.Top="67" MaxLength="14"
+                 Width="121" Text="{Binding Path=Member.FirstName,
                                             RelativeSource={RelativeSource 
                                                                 Mode=FindAncestor, 
                                                                 AncestorType={x:Type UserControl}},
                                             ValidatesOnDataErrors=True}"/>
-        <TextBox x:Name="txtbLName" Height="22" Canvas.Left="356" TextWrapping="Wrap" Canvas.Top="67" 
+        <TextBox x:Name="txtbLName" Height="22" Canvas.Left="356" TextWrapping="Wrap" Canvas.Top="67" MaxLength="14"
                  Width="116" Text="{Binding Path=Member.LastName, 
                                             RelativeSource={RelativeSource 
                                                                 Mode=FindAncestor, 
                                                                 AncestorType={x:Type UserControl}},
                                             ValidatesOnDataErrors=True}"/>
-        <TextBox x:Name="txtbBirthPlace" Height="23" Canvas.Left="209" TextWrapping="Wrap" Canvas.Top="216" Width="131"
+        <TextBox x:Name="txtbBirthPlace" Height="23" Canvas.Left="209" TextWrapping="Wrap" Canvas.Top="216" Width="131" MaxLength="40"
                  Text="{Binding Path=Member.BirthPlace, 
                                 RelativeSource={RelativeSource 
                                                     Mode=FindAncestor, 
                                                     AncestorType={x:Type UserControl}},
                                 ValidatesOnDataErrors=True}"/>
-        <TextBox x:Name="txtbDeathPlace" Height="22" Canvas.Left="356" TextWrapping="Wrap" Canvas.Top="216" Width="127"
+        <TextBox x:Name="txtbDeathPlace" Height="22" Canvas.Left="356" TextWrapping="Wrap" Canvas.Top="216" Width="127" MaxLength="40"
                  Text="{Binding Path=Member.DeathPlace, 
                                 RelativeSource={RelativeSource 
                                                     Mode=FindAncestor, 
@@ -57,27 +57,22 @@
                      IsChecked="{Binding Member.IsMaleChecked, 
                                     RelativeSource={RelativeSource 
                                                         Mode=FindAncestor, 
-                                                        AncestorType={x:Type UserControl}},
-                                    ValidatesOnDataErrors=True}"/>
+                                                        AncestorType={x:Type UserControl}}}"/>
         <RadioButton x:Name="femaleRadioButton" GroupName="Gender" Content="Female" Canvas.Left="27" Canvas.Top="287" FontSize="14" FontWeight="Medium"
                      IsChecked="{Binding Member.IsFemaleChecked, 
                                     RelativeSource={RelativeSource 
                                                         Mode=FindAncestor, 
-                                                        AncestorType={x:Type UserControl}},
-                                    ValidatesOnDataErrors=True}"/>
+                                                        AncestorType={x:Type UserControl}}}"/>
         <RadioButton x:Name="deceasedRadioButton" GroupName="Status" Content="Deceased" Canvas.Left="107" Canvas.Top="254" FontSize="14" FontWeight="Medium"
                      IsChecked="{Binding Path=Member.IsDeceasedChecked, 
                                     RelativeSource={RelativeSource 
                                                         Mode=FindAncestor, 
-                                                        AncestorType={x:Type UserControl}},
-                                    ValidatesOnDataErrors=True, 
-                                    Mode=TwoWay}"/>
+                                                        AncestorType={x:Type UserControl}}}"/>
         <RadioButton x:Name="livingRadioButton" GroupName="Status" Content="Living" Canvas.Left="107" Canvas.Top="287" FontSize="14" FontWeight="Medium"
                      IsChecked="{Binding Member.IsLivingChecked, 
                                          RelativeSource={RelativeSource 
                                                             Mode=FindAncestor, 
-                                                            AncestorType={x:Type UserControl}},
-                                         ValidatesOnDataErrors=True}"/>
+                                                            AncestorType={x:Type UserControl}}}"/>
         <DatePicker x:Name="birthDatePicker" Canvas.Left="208" Canvas.Top="139" 
                     SelectedDate="{Binding Member.BirthDate, 
                                            RelativeSource={RelativeSource 
@@ -92,11 +87,11 @@
                                            ValidatesOnDataErrors=True}"
                     IsEnabled="{Binding ElementName=deceasedRadioButton, Path=IsChecked}"/>
         <Button x:Name="saveButton" Content="Add" Canvas.Left="317" Canvas.Top="303" Width="75" Command="Save"/>
-        <Button x:Name="cancelButton" Content="Cancel" Canvas.Left="408" Canvas.Top="303" Width="75"/>
+        <Button x:Name="cancelButton" Content="Cancel" Canvas.Left="408" Canvas.Top="303" Width="75" Command="Close"/>
         <Button x:Name="uploadImageButton" Content="Add foto" Canvas.Left="69" Canvas.Top="168" Width="56" 
                 Command="local:ViewModel.UploadImage"
                 CommandParameter="{Binding ElementName=addMemberControl}"/>
-        <Button Canvas.Left="465" Canvas.Top="10" Background="Transparent" Click="Button_Click">
+        <Button x:Name="closeButton" Canvas.Left="465" Canvas.Top="10" Background="Transparent" Command="Close">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Ellipse Width="25" Height="25">

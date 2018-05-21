@@ -11,13 +11,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FamilyTreeApp
 {
-    public partial class Member : INotifyPropertyChanged
+    public partial class Member : INotifyPropertyChanged, ICloneable
     {
 
         #region Properties
 
         private string _firstName;
-        [StringLength(15)]
+        [Required]
         public string FirstName {
             get => _firstName;
             set {
@@ -27,7 +27,7 @@ namespace FamilyTreeApp
         }
 
         private string _lastName;
-        [StringLength(15)]
+        [Required]
         public string LastName
         {
             get => _lastName;
@@ -134,7 +134,8 @@ namespace FamilyTreeApp
             }
         }
 
-        private Image _photo = new Image();
+        public Image _photo = new Image();
+
         public System.Windows.Media.ImageSource PhotoSource
         {
             get => _photo.Source;
@@ -147,7 +148,38 @@ namespace FamilyTreeApp
 
         #endregion
 
-        
+        public object Clone()
+        {
+            var clone = new Member();
+            clone.IsDeceasedChecked = this.IsDeceasedChecked;
+            clone.BirthDate = this.BirthDate;
+            clone.BirthPlace = this.BirthPlace;
+            clone.DeathDate = this.DeathDate;
+            clone.DeathPlace = this.DeathPlace;
+            clone.FirstName = this.FirstName;
+            clone.IsFemaleChecked = this.IsFemaleChecked;
+            clone.IsLivingChecked = this.IsLivingChecked;
+            clone.IsMaleChecked = this.IsMaleChecked;
+            clone.LastName = this.LastName;
+            clone.PhotoSource = this.PhotoSource?.Clone();
+            return clone;
+        }
+
+        public void UpdateChanges(Member updatedMember)
+        {
+            this.IsDeceasedChecked = updatedMember.IsDeceasedChecked;
+            this.FirstName = updatedMember.FirstName;
+            this.LastName = updatedMember.LastName;
+            this.BirthDate = updatedMember.BirthDate;
+            this.DeathDate = updatedMember.DeathDate;
+            this.BirthPlace = updatedMember.BirthPlace;
+            this.DeathPlace = updatedMember.DeathPlace;
+            this.IsFemaleChecked = updatedMember.IsFemaleChecked;
+            this.IsLivingChecked = updatedMember.IsLivingChecked;
+            this.IsMaleChecked = updatedMember.IsMaleChecked;
+            this.PhotoSource = updatedMember.PhotoSource;
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged([CallerMemberName]string propertyName = "") =>

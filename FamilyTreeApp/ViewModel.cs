@@ -19,6 +19,14 @@ namespace FamilyTreeApp
         int y = 10;
         private ObservableCollection<Member> MembersCollection = new ObservableCollection<Member>();
 
+        public static RoutedCommand UploadImage = new RoutedCommand();
+
+        //public void AddMemberToCollection(MemberControl newMember) => MembersCollection.Add(newMember);
+        
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        #region Methods 
+        
         public void CreateMember(Window parentWindow)
         {
             var newMember = new Member();
@@ -40,20 +48,29 @@ namespace FamilyTreeApp
             var result = addMemberWindow.ShowDialog();
             if (result.HasValue && result.Value == true)
             {
-                MessageBox.Show("OK");
-                //AddMemberToCollection(newMember);
                 var mainWindow = Application.Current.MainWindow as MainWindow;
 
-                var f = new MemberControl(newMember);
+                var f = new MemberControl(this, newMember);
                 f.Margin = new Thickness(x, y, 0, 0);
                 mainWindow.WorkSurface.Children.Add(f);
                 x -= 200;
             }
         }
-        
-        public static RoutedCommand UploadImage = new RoutedCommand();
 
-        public void UploadImageCanExecute(object sender, CanExecuteRoutedEventArgs e) 
+        public void ShowDetailedInfo(object dataContext, Member member)
+        {
+            if (MemberInfoControl.Member != member)
+            {
+                if (MemberInfoControl.IsOpen)
+                    MemberInfoControl.Close();
+
+                var memberInfo = new MemberInfoControl(dataContext as ViewModel, member);
+                memberInfo.Margin = new Thickness(25, 65, 0, 0);
+                (Application.Current.MainWindow as MainWindow).WorkSurface.Children.Add(memberInfo);
+            }
+        }
+        
+        public void UploadImageCanExecute(object sender, CanExecuteRoutedEventArgs e)
             => e.CanExecute = true;
 
         public void UploadImageExecuted(object sender, ExecutedRoutedEventArgs e)
@@ -65,23 +82,23 @@ namespace FamilyTreeApp
                 var result = cropWindowdialog.ShowDialog();
                 if (result.HasValue && result.Value == true)
                 {
-                    MessageBox.Show("OK");
                     Image targetFoto = null;
 
-                    if (e.Parameter.GetType() == typeof(MemberControl)) targetFoto = (e.Parameter as MemberControl).memberFacePic;
-                    else if (e.Parameter.GetType() == typeof(MemberInfoControl)) targetFoto = (e.Parameter as MemberInfoControl).memberFacePic;
-                    else if (e.Parameter.GetType() == typeof(AddMemberControl)) targetFoto = (e.Parameter as AddMemberControl).memberFacePic;
+                    if (e.Parameter.GetType() == typeof(MemberControl))
+                        targetFoto = (e.Parameter as MemberControl).memberFacePic;
+                    else if (e.Parameter.GetType() == typeof(MemberInfoControl))
+                        targetFoto = (e.Parameter as MemberInfoControl).memberFacePic;
+                    else if (e.Parameter.GetType() == typeof(AddMemberControl))
+                        targetFoto = (e.Parameter as AddMemberControl).memberFacePic;
 
                     targetFoto.Source = CropWindow.LastCroppedImage.Source;
                 }
             }
         }
 
-        //public void AddMemberToCollection(MemberControl newMember) => MembersCollection.Add(newMember);
-        
-        public event PropertyChangedEventHandler PropertyChanged;
-
         private void OnPropertyChanged(string propertyName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        #endregion
     }
 }

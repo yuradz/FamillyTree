@@ -26,9 +26,6 @@ namespace FamilyTreeApp
                     case nameof(LastName):
                         errors = GetErrorsFromAnnotations(nameof(LastName), LastName);
                         break;
-                    //case nameof(PetName):
-                    //    errors = GetErrorsFromAnnotations(nameof(PetName), PetName);
-                    //    break;
                 }
                 if (errors != null && errors.Length != 0)
                 {

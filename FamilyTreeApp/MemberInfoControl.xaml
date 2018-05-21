@@ -6,37 +6,98 @@
              xmlns:local="clr-namespace:FamilyTreeApp"
              mc:Ignorable="d" 
              Height="565" Width="340">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter" />
+    </UserControl.Resources>
     <Canvas>
         <Rectangle Height="565" Width="340" RadiusX="25" RadiusY="25">
             <Rectangle.Fill>
                 <ImageBrush ImageSource="Images/MemberInfoBackground.jpg" Stretch="Fill" Opacity="0.85"/>
             </Rectangle.Fill>
         </Rectangle>
-        <Border BorderBrush="Black" BorderThickness="2" Height="120" Width="90" Canvas.Left="32" Canvas.Top="60">
-            <Image x:Name="memberFacePic"/>
+        <Border BorderBrush="Black" BorderThickness="2" Height="120" Width="90" Canvas.Left="32" Canvas.Top="40">
+            <Image x:Name="memberFacePic" Height="120" Width="90" 
+                   Source="{Binding Path=MemberWithChanges.PhotoSource,
+                                    Mode=TwoWay,
+                                    RelativeSource={RelativeSource 
+                                        Mode=FindAncestor, 
+                                        AncestorType={x:Type UserControl}}}"/>
         </Border>
-        <Label Content="First Name" Canvas.Left="163" Canvas.Top="47" FontFamily="Sitka Display" FontStyle="Italic" Foreground="Brown" FontSize="22"/>
-        <Label Content="Last Name" Canvas.Left="163" Canvas.Top="115" FontFamily="Sitka Display" FontStyle="Italic" Foreground="Brown" FontSize="22"/>
-        <Label Content="Gender" Canvas.Left="32" Canvas.Top="225" FontFamily="Sitka Display" FontStyle="Italic" Foreground="Brown" FontSize="22" />
-        <Label Content="Status" Canvas.Left="38" Canvas.Top="325" FontFamily="Sitka Display" FontStyle="Italic" Foreground="Brown" FontSize="22" />
-        <Label Content="Birth Date" Canvas.Left="163" Canvas.Top="201" FontFamily="Sitka Display" FontStyle="Italic" Foreground="Brown" FontSize="22" />
-        <Label Content="Death Date" Canvas.Left="163" Canvas.Top="359" FontFamily="Sitka Display" FontStyle="Italic" Foreground="Brown" FontSize="22" />
-        <Label Content="Birth Place" Canvas.Left="164" Canvas.Top="280" FontFamily="Sitka Display" FontStyle="Italic" Foreground="Brown" FontSize="22" />
-        <Label Content="Death Place" Canvas.Left="163" Canvas.Top="438" FontFamily="Sitka Display" FontStyle="Italic" Foreground="Brown" FontSize="22" />
-        <RadioButton Content="Male" Canvas.Left="38" Canvas.Top="270" FontSize="14" FontWeight="Medium" Width="57"/>
-        <RadioButton Content="Female" Canvas.Left="38" Canvas.Top="300" FontSize="14" FontWeight="Medium"/>
-        <RadioButton Content="Deceased" Canvas.Left="38" Canvas.Top="370" FontSize="14" FontWeight="Medium"/>
-        <RadioButton Content="Living" Canvas.Left="38" Canvas.Top="400" FontSize="14" FontWeight="Medium"/>
-        <DatePicker Canvas.Left="163" Canvas.Top="246"/>
-        <DatePicker Canvas.Left="163" Canvas.Top="404"/>
-        <TextBox Padding="0,-4,0,-4" Height="20" Canvas.Left="163" Canvas.Top="86" TextWrapping="Wrap" Text="Yyra" Width="120" Background="{x:Null}"  FontFamily="Times New Roman" FontSize="24" BorderThickness="0"/>
-        <TextBox Height="27" Canvas.Left="163" Canvas.Top="155" TextWrapping="Wrap" Text="Dzyha"  Width="120" Background="Transparent" FontSize="24" FontFamily="Times New Roman" BorderThickness="0"/>
-        <TextBox x:Name="txtbBirthPlace" Height="23" Canvas.Left="163" TextWrapping="Wrap" Text="TextBox" Canvas.Top="325" Width="131"/>
-        <TextBox x:Name="txtbDeathPlace" Height="22" Canvas.Left="163" TextWrapping="Wrap" Text="TextBox" Canvas.Top="483" Width="127"/>
-        <Button x:Name="uploadImageButton" Content="Change foto" Canvas.Left="42" Canvas.Top="190" Width="70" 
+        <Label Content="First Name" Canvas.Left="187" Canvas.Top="33" FontFamily="Sitka Display" FontStyle="Italic" Foreground="Brown" FontSize="22"/>
+        <Label Content="Last Name" Canvas.Left="190" Canvas.Top="107" FontFamily="Sitka Display" FontStyle="Italic" Foreground="Brown" FontSize="22"/>
+        <Label Content="Gender" Canvas.Left="38" Canvas.Top="220" FontFamily="Sitka Display" FontStyle="Italic" Foreground="Brown" FontSize="18" />
+        <Label Content="Status" Canvas.Left="181" Canvas.Top="220" FontFamily="Sitka Display" FontStyle="Italic" Foreground="Brown" FontSize="18" />
+        <Label Content="Birth Date" Canvas.Left="32" Canvas.Top="293" FontFamily="Sitka Display" FontStyle="Italic" Foreground="Brown" FontSize="20" />
+        <Label Content="Death Date" Canvas.Left="181" Canvas.Top="293" FontFamily="Sitka Display" FontStyle="Italic" Foreground="Brown" FontSize="20" />
+        <Label Content="Birth Place" Canvas.Left="19" Canvas.Top="357" FontFamily="Sitka Display" FontStyle="Italic" Foreground="Brown" FontSize="20"/>
+        <Label Content="Death Place" Canvas.Left="19" Canvas.Top="420" FontFamily="Sitka Display" FontStyle="Italic" Foreground="Brown" FontSize="20"
+               Visibility="{Binding ElementName=deceasedRadioButton, Path=IsChecked, Converter={StaticResource booleanToVisibilityConverter}}"/>
+        <RadioButton Content="Male" GroupName="Gender" Canvas.Left="38" Canvas.Top="250" FontSize="14" FontWeight="Medium" Width="57"
+                     IsChecked="{Binding MemberWithChanges.IsMaleChecked,
+                                         RelativeSource={RelativeSource 
+                                                            Mode=FindAncestor, 
+                                                            AncestorType={x:Type UserControl}}}"/>
+        <RadioButton Content="Female" GroupName="Gender" Canvas.Left="38" Canvas.Top="271" FontSize="14" FontWeight="Medium"
+                     IsChecked="{Binding MemberWithChanges.IsFemaleChecked,
+                                         RelativeSource={RelativeSource 
+                                                            Mode=FindAncestor, 
+                                                            AncestorType={x:Type UserControl}}}"/>
+        <RadioButton  x:Name="deceasedRadioButton" GroupName="Status" Content="Deceased" Canvas.Left="181" Canvas.Top="252" FontSize="14" FontWeight="Medium"
+                      IsChecked="{Binding Path=MemberWithChanges.IsDeceasedChecked,           
+                                          RelativeSource={RelativeSource 
+                                                              Mode=FindAncestor, 
+                                                              AncestorType={x:Type UserControl}}}"/>
+        <RadioButton x:Name="livingRadioButton" GroupName="Status" Content="Living" Canvas.Left="181" Canvas.Top="270" FontSize="14" FontWeight="Medium"
+                     IsChecked="{Binding MemberWithChanges.IsLivingChecked,
+                                         RelativeSource={RelativeSource 
+                                                            Mode=FindAncestor, 
+                                                            AncestorType={x:Type UserControl}}}"/>
+        <DatePicker Canvas.Left="38" Canvas.Top="328"
+                    SelectedDate="{Binding MemberWithChanges.BirthDate, 
+                                           RelativeSource={RelativeSource 
+                                                              Mode=FindAncestor, 
+                                                              AncestorType={x:Type UserControl}},
+                                           ValidatesOnDataErrors=True}"/>
+        <DatePicker Canvas.Left="181" Canvas.Top="328"
+                    SelectedDate="{Binding MemberWithChanges.DeathDate, 
+                                           RelativeSource={RelativeSource 
+                                                              Mode=FindAncestor, 
+                                                              AncestorType={x:Type UserControl}},
+                                           ValidatesOnDataErrors=True}"
+                    IsEnabled="{Binding ElementName=deceasedRadioButton, Path=IsChecked}"/>
+        <TextBox Padding="0,-4,0,-4" Height="20" Canvas.Left="157" Canvas.Top="76" MaxLength="14" Width="172" Background="{x:Null}"  
+                 FontFamily="Times New Roman" FontSize="24" BorderThickness="0" TextAlignment="Center"
+                 Text="{Binding Path=MemberWithChanges.FirstName,
+                                            RelativeSource={RelativeSource 
+                                                                Mode=FindAncestor, 
+                                                                AncestorType={x:Type UserControl}},
+                                            ValidatesOnDataErrors=True}"/>
+        <TextBox Padding="0,-4,0,-4" Height="20" Canvas.Left="157" Canvas.Top="145" MaxLength="14" Width="172" Background="Transparent" 
+                 FontSize="24" FontFamily="Times New Roman" BorderThickness="0" TextAlignment="Center"
+                 Text="{Binding Path=MemberWithChanges.LastName,
+                                            RelativeSource={RelativeSource 
+                                                                Mode=FindAncestor, 
+                                                                AncestorType={x:Type UserControl}},
+                                            ValidatesOnDataErrors=True}"/>
+        <TextBox x:Name="txtbBirthPlace" Height="23" Canvas.Left="19" Canvas.Top="392" Width="308" MaxLength="40" Background="{x:Null}"
+                 FontFamily="Times New Roman" FontSize="18" BorderThickness="0"  TextAlignment="Left"
+                 Text="{Binding Path=MemberWithChanges.BirthPlace, 
+                                RelativeSource={RelativeSource 
+                                                    Mode=FindAncestor, 
+                                                    AncestorType={x:Type UserControl}},
+                                ValidatesOnDataErrors=True}"/>
+        <TextBox x:Name="txtbDeathPlace" Height="23" Canvas.Left="19" Canvas.Top="460" Width="308" MaxLength="40"
+                 FontFamily="Times New Roman" FontSize="18" BorderThickness="0" TextAlignment="Left" Background="{x:Null}"
+                 Visibility="{Binding ElementName=deceasedRadioButton, Path=IsChecked, Converter={StaticResource booleanToVisibilityConverter}}"
+                 Text="{Binding Path=MemberWithChanges.DeathPlace, 
+                                RelativeSource={RelativeSource 
+                                                    Mode=FindAncestor, 
+                                                    AncestorType={x:Type UserControl}}}"
+                 IsEnabled="{Binding ElementName=deceasedRadioButton, Path=IsChecked}"/>
+        <Button x:Name="uploadImageButton" Content="Change foto" Canvas.Left="42" Canvas.Top="180" Width="70" 
                 Command="local:ViewModel.UploadImage"
-                CommandParameter="{Binding ElementName=addMemberControl}"/>
-        <Button Canvas.Left="305" Canvas.Top="10" Background="Transparent" Click="Button_Click">
+                CommandParameter="{Binding ElementName=memberInfoControl}"/>
+        <Button x:Name="closeButton" Canvas.Left="305" Canvas.Top="10" Background="Transparent" Command ="Close">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Ellipse Width="25" Height="25">
@@ -48,5 +109,12 @@
             </Button.Template>
             <Image Source="Images/close_button.png" Height="29" Width="47" Opacity="0.9"/>
         </Button>
+        <Line StrokeThickness="1.5" Stroke="Black" X1="19" Y1="413" X2="327" Y2="413"/>
+        <Line StrokeThickness="1.5" Stroke="Black" X1="19" Y1="481" X2="327" Y2="481"
+              Visibility="{Binding ElementName=deceasedRadioButton, Path=IsChecked, Converter={StaticResource booleanToVisibilityConverter}}"/>
+        <Line StrokeThickness="1.5" Stroke="Black" X1="158" Y1="96" X2="327" Y2="96"/>
+        <Line StrokeThickness="1.5" Stroke="Black" X1="158" Y1="165" X2="327" Y2="165"/>
+        <Button x:Name="saveButton" Content="Save" Canvas.Left="190" Canvas.Top="516" Width="59" Height="29" Command="Save"/>
+        <Button x:Name="cancelButton" Content="Cancel" Canvas.Left="261" Canvas.Top="516" Width="59" Height="29" Command="Close"/>
     </Canvas>
 </UserControl>

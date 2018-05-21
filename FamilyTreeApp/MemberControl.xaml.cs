@@ -23,50 +23,38 @@ namespace FamilyTreeApp
     public partial class MemberControl : UserControl
     {
         #region Properties
-        
-        Member Member { get; set; }
+
+        public Member Member { get; set; }
 
         #endregion
 
         #region Ctors
-
-        public MemberControl(Member member)
+        
+        public MemberControl(ViewModel dataContext, Member member)
         {
             InitializeComponent();
 
-            DataContext = member;
+            DataContext = dataContext;
             Member = member;
+
+            CommandBinding UploadImageCommandBinding = new CommandBinding(
+                uploadImageButton.Command,
+                dataContext.UploadImageExecuted,
+                dataContext.UploadImageCanExecute
+                );
+            
+            this.CommandBindings.Add(UploadImageCommandBinding);
         }
 
         #endregion
+
+
 
         #region Event handlers
 
-
+        private void memberControl_MouseDoubleClick(object sender, MouseButtonEventArgs e) =>
+            (DataContext as ViewModel).ShowDetailedInfo(DataContext, Member);
 
         #endregion
-
-        private void UploadImageCanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            //if (memberFacePic?.Source == null)
-            //    e.CanExecute = true;
-            //else
-            //    e.CanExecute = false;
-        }
-
-        private void UploadImageExecuted(object sender, ExecutedRoutedEventArgs e)
-        {
-            //var ofd = new OpenFileDialog();
-            //if (ofd.ShowDialog() == true)
-            //{
-            //    var cropWindowdialog = new CropWindow(ofd.FileName, this, ID);
-            //    var result = cropWindowdialog.ShowDialog();
-            //    if (result.HasValue && result.Value == true)
-            //    {
-            //        MessageBox.Show("OK");
-            //        memberFacePic.Source = CropWindow.LastCroppedImage.Source;
-            //    }
-            //}
-        }
     }
 }

@@ -40,9 +40,9 @@ namespace FamilyTreeApp
             //f.Margin = new Thickness(WorkSurface.Width / 2 - f.Width / 2, WorkSurface.Height / 2 - f.Height / 2, 0, 0);
             //WorkSurface.Children.Add(f);
 
-            var s = new MemberInfoControl();
-            s.Margin = new Thickness(25, 65, 0, 0);
-            WorkSurface.Children.Add(s);
+            //var s = new MemberInfoControl(viewModel);
+            //s.Margin = new Thickness(25, 65, 0, 0);
+            //WorkSurface.Children.Add(s);
 
             //var f = new AddMemberControl(viewModel);
             //f.Margin = new Thickness(WorkSurface.Width / 2 - f.Width / 2, WorkSurface.Height / 2 - f.Height / 2, 0, 0);

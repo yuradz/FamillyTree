@@ -66,6 +66,7 @@
       <DependentUpon>CropWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="DateTimeToYearStringConverter.cs" />
+    <Compile Include="IsNullConverter.cs" />
     <Compile Include="Member.cs" />
     <Compile Include="MemberControl.xaml.cs">
       <DependentUpon>MemberControl.xaml</DependentUpon>

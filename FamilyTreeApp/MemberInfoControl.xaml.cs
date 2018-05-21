@@ -23,87 +23,85 @@ namespace FamilyTreeApp
 
         #region Properties
 
-        //private static int IDcounter = 1;
+        public static Member Member { get; set; }
+        private static MemberInfoControl This { get; set; }
 
-        //private int ID { get; }
-
-        public string FirstName
-        {
-            get { return (string)GetValue(FirstNameProperty); }
-            set { SetValue(FirstNameProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for FName.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty FirstNameProperty =
-            DependencyProperty.Register("FirstName", typeof(string), typeof(MemberInfoControl), new PropertyMetadata());
-
-
-
-        public string LastName
-        {
-            get { return (string)GetValue(LastNameProperty); }
-            set { SetValue(LastNameProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for LName.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty LastNameProperty =
-            DependencyProperty.Register("LastName", typeof(string), typeof(MemberInfoControl), new PropertyMetadata());
-
-
-        
-        public DateTime BirthDate
-        {
-            get { return (DateTime)GetValue(BirthDateProperty); }
-            set { SetValue(BirthDateProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for BirthDate.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty BirthDateProperty =
-            DependencyProperty.Register("BirthDate", typeof(DateTime), typeof(MemberInfoControl), new PropertyMetadata());
-
-
-
-        public DateTime DeathDate
-        {
-            get { return (DateTime)GetValue(DeathDateProperty); }
-            set { SetValue(DeathDateProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for DeathDate.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty DeathDateProperty =
-            DependencyProperty.Register("DeathDate", typeof(DateTime), typeof(MemberInfoControl), new PropertyMetadata());
-
-
-
-        public bool? IsDeceasedActivated
-        {
-            get { return (bool?)GetValue(IsDeceasedActivatedProperty); }
-            set { SetValue(IsDeceasedActivatedProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for IsDeceasedActivated.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty IsDeceasedActivatedProperty =
-            DependencyProperty.Register("IsDeceasedActivated", typeof(bool?), typeof(MemberInfoControl), new PropertyMetadata(false));
-
-
+        public Member MemberWithChanges { get; set; }
 
         #endregion
 
-        public MemberInfoControl()
+        #region Ctor
+        
+        public MemberInfoControl(ViewModel dataContext, Member member)
         {
             InitializeComponent();
+
+            this.DataContext = dataContext;
+            this.MemberWithChanges = member.Clone() as Member;
+            MemberInfoControl.Member = member;
+
+            CommandBinding UploadImageCommandBinding = new CommandBinding(
+                uploadImageButton.Command,
+                dataContext.UploadImageExecuted,
+                dataContext.UploadImageCanExecute
+                );
+            CommandBinding SaveCommandBinding = new CommandBinding(
+                saveButton.Command,
+                SaveExecuted,
+                SaveCanExecute
+                );
+            CommandBinding CloseCommandBinding = new CommandBinding(
+                closeButton.Command,
+                (s, e) => Close(),
+                (s, e) => e.CanExecute = true
+                );
+
+            this.CommandBindings.Add(UploadImageCommandBinding);
+            this.CommandBindings.Add(SaveCommandBinding);
+            this.CommandBindings.Add(CloseCommandBinding);
+            this.InputBindings.Add(new InputBinding(saveButton.Command, new KeyGesture(Key.Escape)));
+            This = this;
         }
 
-        //public MemberInfoControl(object caller)
-        //{
-        //    InitializeComponent();
+        #endregion
 
-        //    if (caller is MainWindow) Caller = caller;
-        //}
+        #region Methods
+        
+        public static bool IsOpen =>
+            This == null ? false : true;
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        public static void Close()
         {
-            MessageBox.Show("!");
+            (Application.Current.MainWindow as MainWindow).WorkSurface.Children.Remove(This);
+
+            Member = null;
+            This = null;
         }
+
+        private void SaveCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (!MemberWithChanges.HasErrors)
+                e.CanExecute = true;
+            else
+                e.CanExecute = false;
+        }
+
+        private void SaveExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            Member.UpdateChanges(MemberWithChanges);
+            Close();
+        }
+
+        #endregion
+
+        #region Event Handlers
+        
+        private void cancelButton_Click(object sender, RoutedEventArgs e) =>
+            Close();
+        
+        private void closeButton_Click(object sender, RoutedEventArgs e) =>
+            Close();
+
+        #endregion
     }
 }
